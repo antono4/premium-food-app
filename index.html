@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Trumada - Premium Culinary App. Pesan makanan premium berkualitas dengan pengiriman cepat.">
-    <meta name="theme-color" content="#0D0D0D">
     <title>Trumada - Premium Culinary</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <script>
@@ -17,91 +13,392 @@
             theme: {
                 extend: {
                     colors: {
+                        darkBg: '#0D0D0D',
+                        cardBg: '#1A1A1A',
+                        cardHover: '#252525',
+                        skyBlue: '#38BDF8',
+                        skyBlueLight: '#7DD3FC',
+                        skyBlueDark: '#0EA5E9',
+                        textMuted: '#8A8A8A',
+                        textLight: '#E5E5E5',
+                        borderSubtle: '#2A2A2A',
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    borderRadius: {
+                        '2xl': '1rem',
+                        '3xl': '1.5rem',
+                        '4xl': '2rem',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background: linear-gradient(180deg, #0EA5E9 0%, #38BDF8 50%, #7DD3FC 100%);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
 
+        .phone-container {
+            width: 100%;
+            max-width: 420px;
+            min-height: 100vh;
+            background-color: #0F172A;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+            }
+            .phone-container {
+                height: 90vh;
+                max-height: 900px;
+                border-radius: 40px;
+                border: 8px solid #1E3A5F;
+                box-shadow: 0 25px 80px rgba(0,0,0,0.5), 0 0 100px rgba(56, 189, 248, 0.1);
+            }
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .screen {
+            display: none;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #0F172A;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .screen.active { display: flex; flex-direction: column; }
+
+        .screen-enter { animation: slideIn 0.35s cubic-bezier(0.32, 0.72, 0, 1); }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .food-img { border-radius: 16px; object-fit: cover; }
+        .img-shadow { filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5)); }
+        .card-shadow { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+
+        .btn-press { transition: transform 0.15s, box-shadow 0.15s; }
+        .btn-press:active { transform: scale(0.96); }
+
+        .nav-item { transition: all 0.2s; opacity: 0.6; }
+        .nav-item.active { opacity: 1; color: #38BDF8; }
+        .nav-item:hover { opacity: 1; }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1A1A1A;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #2A2A2A;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        .category-pill { transition: all 0.2s; }
+        .category-pill.active { background: #38BDF8 !important; color: #0D0D0D !important; }
+
+        .menu-item { transition: background 0.2s, transform 0.2s; }
+        .menu-item:active { background: #252525; transform: scale(0.98); }
+
+        .qty-btn { transition: all 0.15s; }
+        .qty-btn:active { transform: scale(0.9); }
+
+        .float-slow { animation: floatSlow 6s ease-in-out infinite; }
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(3deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast" class="toast">
+        <i class="fa-solid fa-check-circle text-skyBlue"></i>
         <span id="toast-message">Item ditambahkan</span>
     </div>
 
-    <div class="phone-container" id="main-content">
+    <div class="phone-container">
         
         <!-- ==================== SCREEN 1: LOGIN/SPLASH ==================== -->
-        <div id="screen-login" class="screen active flex-col items-center justify-center px-6" role="region" aria-label="Selamat Datang">
+        <div id="screen-login" class="screen active flex-col items-center justify-center px-6">
             <div class="absolute inset-0 overflow-hidden pointer-events-none">
-
+                <div class="absolute -top-20 -right-20 w-64 h-64 bg-skyBlue/5 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-32 -left-20 w-80 h-80 bg-skyBlue/5 rounded-full blur-3xl"></div>
             </div>
 
-            <div class="relative z-10 text-center -mt-16 animate-fade-in">
-                <div class="mb-4">
-                    <span class="inline-block w-16 h-16 bg-gradient-to-br from-skyBlue to-skyBlueDark rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-skyBlue/30">
-                        <i class="fa-solid fa-utensils text-2xl text-black"></i>
-                    </span>
-                </div>
+            <div class="relative z-10 text-center -mt-16">
                 <h1 class="text-5xl font-serif font-bold mb-1 tracking-tight">Trumada</h1>
-                <p class="textMuted text-sm tracking-widest uppercase">Premium Culinary</p>
+                <p class="text-textMuted text-sm tracking-widest uppercase">Premium Culinary</p>
             </div>
             
             <div class="relative w-full max-w-xs mx-auto my-10">
-
-                    </div>
-                    <span class="text-xs textMuted">Gratis<br>Ongkir</span>
+                <div class="absolute inset-0 bg-skyBlue/10 rounded-3xl blur-2xl transform scale-95"></div>
+                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                     alt="Featured Dish" class="relative w-full h-64 object-cover rounded-3xl img-shadow">
+                <div class="absolute -top-3 -right-3 bg-skyBlue text-black text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                    <i class="fa-solid fa-fire mr-1"></i> Populer
                 </div>
-
-                    </div>
-                    <span class="text-xs textMuted">Premium<br>Kualitas</span>
+                <div class="absolute bottom-4 left-4 bg-black/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full">
+                    <i class="fa-solid fa-star text-skyBlue mr-1"></i> 4.9
                 </div>
-
+            </div>
+            
+            <div class="flex justify-center gap-8 mb-8 text-center">
+                <div class="flex flex-col items-center">
+                    <div class="w-12 h-12 bg-cardBg rounded-2xl flex items-center justify-center mb-2">
+                        <i class="fa-solid fa-truck-fast text-skyBlue"></i>
+                    </div>
+                    <span class="text-xs text-textMuted">Gratis<br>Ongkir</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-12 h-12 bg-cardBg rounded-2xl flex items-center justify-center mb-2">
+                        <i class="fa-solid fa-certificate text-skyBlue"></i>
+                    </div>
+                    <span class="text-xs text-textMuted">Premium<br>Kualitas</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-12 h-12 bg-cardBg rounded-2xl flex items-center justify-center mb-2">
+                        <i class="fa-solid fa-clock text-skyBlue"></i>
+                    </div>
+                    <span class="text-xs text-textMuted">Cepat<br>Tiba</span>
                 </div>
             </div>
             
             <div class="w-full max-w-xs space-y-3 mt-4">
-
+                <button onclick="navigateTo('screen-home')" class="w-full bg-skyBlue text-black font-semibold py-4 rounded-2xl text-base shadow-lg shadow-skyBlue/30 btn-press flex items-center justify-center gap-2">
                     <span>Mulai Pesan</span>
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
-                <div class="flex items-center justify-center gap-4 text-sm textMuted mt-6">
+                <div class="flex items-center justify-center gap-4 text-sm text-textMuted mt-6">
                     <div class="flex-1 h-px bg-borderSubtle"></div>
                     <span>atau</span>
                     <div class="flex-1 h-px bg-borderSubtle"></div>
                 </div>
                 <div class="flex gap-3 mt-3">
-
+                    <button class="flex-1 bg-cardBg py-3.5 rounded-2xl flex items-center justify-center gap-2 text-sm border border-borderSubtle btn-press">
+                        <i class="fa-brands fa-apple text-lg"></i>
+                        <span>Apple</span>
+                    </button>
+                    <button class="flex-1 bg-cardBg py-3.5 rounded-2xl flex items-center justify-center gap-2 text-sm border border-borderSubtle btn-press">
                         <i class="fa-brands fa-google text-lg"></i>
                         <span>Google</span>
                     </button>
                 </div>
-                <p class="text-center text-xs text-textMuted mt-4">
-                    Dengan melanjutkan, Anda menyetujui <a href="#" class="text-skyBlue hover:underline">Syarat & Ketentuan</a> dan <a href="#" class="text-skyBlue hover:underline">Kebijakan Privasi</a> kami.
-                </p>
             </div>
         </div>
 
 
         <!-- ==================== SCREEN 2: HOME ==================== -->
-        <div id="screen-home" class="screen no-scrollbar pb-24" role="region" aria-label="Halaman Utama">
+        <div id="screen-home" class="screen no-scrollbar pb-24">
             <!-- Header -->
-            <div class="sticky top-0 z-40 bg-darkBg/95 backdrop-blur-lg border-b border-borderLight">
+            <div class="sticky top-0 z-40 bg-darkBg/95 backdrop-blur-lg border-b border-borderSubtle">
                 <div class="flex justify-between items-center px-5 pt-14 pb-4">
+                    <div>
+                        <p class="text-textMuted text-xs">Selamat Datang 👋</p>
+                        <h2 class="text-xl font-serif font-bold">Trumada</h2>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="navigateTo('screen-search')" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                        <button onclick="navigateTo('screen-cart')" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press relative">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                            <span id="cart-badge-home" class="absolute -top-1 -right-1 w-5 h-5 bg-skyBlue text-black text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Featured Banner -->
+            <div class="px-5 mt-4 mb-6">
+                <div class="relative bg-gradient-to-br from-skyBlue/20 to-skyBlue/5 rounded-3xl p-5 overflow-hidden" onclick="openDetail('quinoa-bowl')" style="cursor:pointer;">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-skyBlue/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                    <div class="flex items-center gap-4">
+                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" 
+                             alt="Featured" class="w-24 h-24 rounded-2xl object-cover img-shadow float-slow">
+                        <div class="flex-1">
+                            <span class="text-skyBlue text-xs font-semibold">✨ Rekomendasi</span>
+                            <h3 class="text-lg font-serif font-bold mt-1">Quinoa Bowl</h3>
+                            <p class="text-textMuted text-xs mt-1 line-clamp-2">Sayuran segar dengan protein nabati pilihan</p>
+                            <div class="flex items-center gap-2 mt-2">
+                                <span class="text-skyBlue font-bold">$14.50</span>
+                                <span class="text-textMuted text-xs">•</span>
+                                <span class="text-textMuted text-xs flex items-center"><i class="fa-regular fa-clock mr-1 text-xs"></i>20 menit</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="px-5 mb-6">
+                <div class="flex gap-3 overflow-x-auto no-scrollbar">
+                    <button class="category-pill active px-5 py-2.5 bg-cardBg rounded-full text-sm font-medium whitespace-nowrap">Semua</button>
+                    <button class="category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap">Vegan</button>
+                    <button class="category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap">Daging</button>
+                    <button class="category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap">Seafood</button>
+                    <button class="category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap">Minuman</button>
+                </div>
+            </div>
+
+            <!-- Popular Menu -->
+            <div class="px-5 flex-1">
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="text-lg font-semibold">Menu Populer</h4>
+                    <button onclick="navigateTo('screen-search')" class="text-skyBlue text-xs font-medium">Lihat Semua</button>
+                </div>
+                
+                <div class="space-y-3">
+                    <div class="menu-item bg-cardBg p-4 rounded-2xl flex items-center gap-4 cursor-pointer" onclick="openDetail('quinoa-bowl')">
+                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Quinoa Bowl" class="w-20 h-20 rounded-2xl object-cover">
+                        <div class="flex-1 min-w-0">
+                            <h5 class="font-semibold text-sm truncate">Quinoa Bowl Spesial</h5>
+                            <p class="text-textMuted text-xs mt-0.5 line-clamp-1">Sayuran segar, alpukat, quinoa organik</p>
+                            <div class="flex items-center gap-1 mt-1">
+                                <i class="fa-solid fa-star text-skyBlue text-xs"></i>
+                                <span class="text-xs">4.8</span>
+                                <span class="text-textMuted text-xs ml-1">•</span>
+                                <span class="text-textMuted text-xs ml-1">320 kcal</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end gap-2">
+                            <span class="text-skyBlue font-bold">$14.50</span>
+                            <button onclick="event.stopPropagation(); addToCart('quinoa-bowl')" class="w-8 h-8 bg-skyBlue rounded-lg flex items-center justify-center btn-press">
+                                <i class="fa-solid fa-plus text-black text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item bg-cardBg p-4 rounded-2xl flex items-center gap-4 cursor-pointer" onclick="openDetail('margherita-pizza')">
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Pizza" class="w-20 h-20 rounded-2xl object-cover">
+                        <div class="flex-1 min-w-0">
+                            <h5 class="font-semibold text-sm truncate">Rustic Margherita</h5>
+                            <p class="text-textMuted text-xs mt-0.5 line-clamp-1">Tomat, basil segar, mozzarella</p>
+                            <div class="flex items-center gap-1 mt-1">
+                                <i class="fa-solid fa-star text-skyBlue text-xs"></i>
+                                <span class="text-xs">4.7</span>
+                                <span class="text-textMuted text-xs ml-1">•</span>
+                                <span class="text-textMuted text-xs ml-1">850 kcal</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end gap-2">
+                            <span class="text-skyBlue font-bold">$12.00</span>
+                            <button onclick="event.stopPropagation(); addToCart('margherita-pizza')" class="w-8 h-8 bg-skyBlue rounded-lg flex items-center justify-center btn-press">
+                                <i class="fa-solid fa-plus text-black text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item bg-cardBg p-4 rounded-2xl flex items-center gap-4 cursor-pointer" onclick="openDetail('truffle-pasta')">
+                        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Pasta" class="w-20 h-20 rounded-2xl object-cover">
+                        <div class="flex-1 min-w-0">
+                            <h5 class="font-semibold text-sm truncate">Pasta Truffle</h5>
+                            <p class="text-textMuted text-xs mt-0.5 line-clamp-1">Krim jamur, truffle, parmesan</p>
+                            <div class="flex items-center gap-1 mt-1">
+                                <i class="fa-solid fa-star text-skyBlue text-xs"></i>
+                                <span class="text-xs">4.9</span>
+                                <span class="text-textMuted text-xs ml-1">•</span>
+                                <span class="text-textMuted text-xs ml-1">720 kcal</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end gap-2">
+                            <span class="text-skyBlue font-bold">$18.00</span>
+                            <button onclick="event.stopPropagation(); addToCart('truffle-pasta')" class="w-8 h-8 bg-skyBlue rounded-lg flex items-center justify-center btn-press">
+                                <i class="fa-solid fa-plus text-black text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-item bg-cardBg p-4 rounded-2xl flex items-center gap-4 cursor-pointer" onclick="openDetail('avocado-toast')">
+                        <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Toast" class="w-20 h-20 rounded-2xl object-cover">
+                        <div class="flex-1 min-w-0">
+                            <h5 class="font-semibold text-sm truncate">Avocado Toast</h5>
+                            <p class="text-textMuted text-xs mt-0.5 line-clamp-1">Alpukat segar, roti sourdough</p>
+                            <div class="flex items-center gap-1 mt-1">
+                                <i class="fa-solid fa-star text-skyBlue text-xs"></i>
+                                <span class="text-xs">4.6</span>
+                                <span class="text-textMuted text-xs ml-1">•</span>
+                                <span class="text-textMuted text-xs ml-1">280 kcal</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end gap-2">
+                            <span class="text-skyBlue font-bold">$8.50</span>
+                            <button onclick="event.stopPropagation(); addToCart('avocado-toast')" class="w-8 h-8 bg-skyBlue rounded-lg flex items-center justify-center btn-press">
+                                <i class="fa-solid fa-plus text-black text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Navigation -->
+            <div class="fixed bottom-0 left-0 right-0 bg-cardBg/95 backdrop-blur-xl border-t border-borderSubtle z-50" style="max-width:420px; margin:0 auto;">
+                <div class="flex justify-around items-center py-3 px-4">
+                    <button class="nav-item active flex flex-col items-center gap-1 px-4 py-1">
+                        <i class="fa-solid fa-house text-xl"></i>
+                        <span class="text-[10px] font-medium">Home</span>
+                    </button>
+                    <button onclick="navigateTo('screen-search')" class="nav-item flex flex-col items-center gap-1 px-4 py-1">
+                        <i class="fa-solid fa-compass text-xl"></i>
+                        <span class="text-[10px] font-medium">Explore</span>
+                    </button>
+                    <button onclick="navigateTo('screen-cart')" class="nav-item flex flex-col items-center gap-1 px-4 py-1 relative">
+                        <i class="fa-solid fa-bag-shopping text-xl"></i>
+                        <span id="cart-badge-nav" class="absolute top-0 right-2 w-4 h-4 bg-skyBlue text-black text-[9px] font-bold rounded-full flex items-center justify-center hidden">0</span>
                         <span class="text-[10px] font-medium">Cart</span>
                     </button>
-                    <button onclick="navigateTo('screen-favorites')" class="nav-item flex flex-col items-center gap-1 px-4 py-1 relative">
-                        <i class="fa-regular fa-heart text-xl"></i>
-                        <span id="favorites-badge-nav" class="absolute top-0 right-2 w-4 h-4 bg-danger text-white text-[9px] font-bold rounded-full flex items-center justify-center hidden">0</span>
-                        <span class="text-[10px] font-medium">Favorit</span>
+                    <button class="nav-item flex flex-col items-center gap-1 px-4 py-1">
+                        <i class="fa-regular fa-user text-xl"></i>
+                        <span class="text-[10px] font-medium">Profile</span>
                     </button>
                 </div>
-            </nav>
+            </div>
         </div>
 
 
         <!-- ==================== SCREEN 3: DETAIL PAGE ==================== -->
-        <div id="screen-detail" class="screen no-scrollbar pb-28" role="region" aria-label="Detail Menu">
+        <div id="screen-detail" class="screen no-scrollbar pb-28">
             <div class="sticky top-0 z-40 bg-darkBg/95 backdrop-blur-lg">
                 <div class="flex justify-between items-center px-5 pt-14 pb-3">
-                    <button onclick="navigateBack()" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press" aria-label="Kembali">
+                    <button onclick="navigateBack()" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press">
                         <i class="fa-solid fa-arrow-left"></i>
                     </button>
                     <h2 class="text-lg font-serif font-bold">Detail</h2>
-                    <button id="detail-favorite" onclick="toggleFavorite()" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press favorite-btn" aria-label="Tambahkan ke favorit" aria-pressed="false">
+                    <button id="detail-favorite" onclick="toggleFavorite()" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press">
                         <i class="fa-regular fa-heart"></i>
                     </button>
                 </div>
@@ -112,11 +409,12 @@
                     <img id="detail-image" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
                          alt="Food Detail" class="w-full h-64 object-cover rounded-3xl img-shadow">
                     <div class="absolute bottom-4 left-4 flex gap-2">
-
+                        <span class="bg-black/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full flex items-center">
+                            <i class="fa-solid fa-star text-skyBlue mr-1"></i> <span id="detail-rating">4.8</span>
                         </span>
-                    </div>
-                    <div id="detail-category-badge" class="absolute top-4 left-4 bg-skyBlue/90 text-black text-xs font-bold px-3 py-1.5 rounded-full">
-                        Vegan
+                        <span class="bg-black/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full flex items-center">
+                            <i class="fa-solid fa-fire text-red-400 mr-1"></i> <span id="detail-calories">320</span> kcal
+                        </span>
                     </div>
                 </div>
             </div>
@@ -125,29 +423,30 @@
                 <div class="flex justify-between items-start">
                     <div>
                         <h1 id="detail-title" class="text-2xl font-serif font-bold">Quinoa Bowl Spesial</h1>
-
+                        <p class="text-textMuted text-sm mt-1">oleh Trumada Kitchen</p>
+                    </div>
+                    <div class="text-right">
+                        <span id="detail-price" class="text-2xl font-bold text-skyBlue">$14.50</span>
                     </div>
                 </div>
             </div>
 
             <div class="px-5 mt-6">
-
+                <h4 class="text-base font-semibold mb-3">Deskripsi</h4>
+                <p id="detail-description" class="text-sm text-textMuted leading-relaxed">
                     Hidangan sehat dan lezat yang menggabungkan quinoa organik, alpukat segar, tomat ceri panggang, dan sayuran hijau pilihan. Disiram dengan saus lemon tahini homemade yang memberikan rasa segar dan gurih. Sempurna untuk makan siang yang mengenyangkan namun ringan.
                 </p>
             </div>
 
             <div class="px-5 mt-6">
-                <h4 class="text-base font-semibold mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-carrot text-skyBlue"></i>
-                    Bahan Utama
-                </h4>
-                <div id="detail-ingredients" class="flex gap-3 overflow-x-auto no-scrollbar pb-2">
+                <h4 class="text-base font-semibold mb-3">Bahan Utama</h4>
+                <div class="flex gap-3 overflow-x-auto no-scrollbar pb-2">
                     <div class="flex flex-col items-center bg-cardBg px-4 py-3 rounded-2xl min-w-[75px]">
-                        <img src="https://images.unsplash.com/photo-1587049352847-81a56d773c1c?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Alpukat" class="w-12 h-12 rounded-xl object-cover mb-2">
+                        <img src="https://images.unsplash.com/photo-1587049352847-81a56d773c1c?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Avocado" class="w-12 h-12 rounded-xl object-cover mb-2">
                         <span class="text-xs font-medium">Alpukat</span>
                     </div>
                     <div class="flex flex-col items-center bg-cardBg px-4 py-3 rounded-2xl min-w-[75px]">
-                        <img src="https://images.unsplash.com/photo-1596683720379-b5c6e8674558?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Tomat" class="w-12 h-12 rounded-xl object-cover mb-2">
+                        <img src="https://images.unsplash.com/photo-1596683720379-b5c6e8674558?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Tomato" class="w-12 h-12 rounded-xl object-cover mb-2">
                         <span class="text-xs font-medium">Tomat</span>
                     </div>
                     <div class="flex flex-col items-center bg-cardBg px-4 py-3 rounded-2xl min-w-[75px]">
@@ -155,53 +454,58 @@
                         <span class="text-xs font-medium">Quinoa</span>
                     </div>
                     <div class="flex flex-col items-center bg-cardBg px-4 py-3 rounded-2xl min-w-[75px]">
-                        <img src="https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Bayam" class="w-12 h-12 rounded-xl object-cover mb-2">
+                        <img src="https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Spinach" class="w-12 h-12 rounded-xl object-cover mb-2">
                         <span class="text-xs font-medium">Bayam</span>
                     </div>
                 </div>
             </div>
 
             <div class="px-5 mt-6">
-                <h4 class="text-base font-semibold mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-plus-circle text-skyBlue"></i>
-                    Tambahan
-                </h4>
-                <div class="space-y-2" id="detail-extras">
-                    <label class="flex items-center justify-between bg-cardBg p-4 rounded-2xl cursor-pointer transition-all hover:bg-cardHover">
+                <h4 class="text-base font-semibold mb-3">Tambahan</h4>
+                <div class="space-y-2">
+                    <label class="flex items-center justify-between bg-cardBg p-4 rounded-2xl cursor-pointer transition-all">
                         <div class="flex items-center gap-3">
-                            <input type="checkbox" class="extra-checkbox w-5 h-5 accent-skyBlue rounded" data-price="2.00">
+                            <input type="checkbox" class="w-5 h-5 accent-skyBlue rounded">
                             <span class="text-sm">Extra Alpukat</span>
                         </div>
-                        <span class="text-skyLight font-medium">+$2.00</span>
+                        <span class="text-skyBlue font-medium">+$2.00</span>
                     </label>
-                    <label class="flex items-center justify-between bg-cardBg p-4 rounded-2xl cursor-pointer transition-all hover:bg-cardHover">
+                    <label class="flex items-center justify-between bg-cardBg p-4 rounded-2xl cursor-pointer transition-all">
                         <div class="flex items-center gap-3">
-                            <input type="checkbox" class="extra-checkbox w-5 h-5 accent-skyBlue rounded" data-price="1.50">
+                            <input type="checkbox" class="w-5 h-5 accent-skyBlue rounded">
                             <span class="text-sm">Extra Protein Telur</span>
                         </div>
-                        <span class="text-skyLight font-medium">+$1.50</span>
-                    </label>
-                    <label class="flex items-center justify-between bg-cardBg p-4 rounded-2xl cursor-pointer transition-all hover:bg-cardHover">
-                        <div class="flex items-center gap-3">
-                            <input type="checkbox" class="extra-checkbox w-5 h-5 accent-skyBlue rounded" data-price="1.00">
-                            <span class="text-sm">Extra Sayuran</span>
-                        </div>
-                        <span class="text-skyBlue font-medium">+$1.00</span>
+                        <span class="text-skyBlue font-medium">+$1.50</span>
                     </label>
                 </div>
             </div>
 
-            <div class="fixed bottom-0 left-0 right-0 bg-cardBg/95 backdrop-blur-xl border-t border-borderLight p-5 z-50" style="max-width:420px; margin:0 auto;">
+            <div class="fixed bottom-0 left-0 right-0 bg-cardBg/95 backdrop-blur-xl border-t border-borderSubtle p-5 z-50" style="max-width:420px; margin:0 auto;">
                 <div class="flex items-center justify-between gap-4">
                     <div class="flex items-center gap-3 bg-cardBg rounded-2xl p-1.5">
-
+                        <button id="qty-minus" onclick="changeQuantity(-1)" class="qty-btn w-9 h-9 rounded-xl bg-darkBg flex items-center justify-center text-textMuted">
+                            <i class="fa-solid fa-minus text-xs"></i>
+                        </button>
+                        <span id="qty-value" class="font-semibold text-base w-6 text-center">1</span>
+                        <button id="qty-plus" onclick="changeQuantity(1)" class="qty-btn w-9 h-9 rounded-xl bg-skyBlue flex items-center justify-center text-black">
                             <i class="fa-solid fa-plus text-xs"></i>
                         </button>
                     </div>
                     
+                    <button onclick="addToCartFromDetail()" class="flex-1 bg-skyBlue text-black font-semibold py-4 rounded-2xl text-sm shadow-lg shadow-skyBlue/30 btn-press flex items-center justify-center gap-2">
+                        <span>Tambah ke Keranjang</span>
+                        <span id="detail-total-price">$14.50</span>
+                    </button>
+                </div>
+            </div>
+        </div>
 
+
+        <!-- ==================== SCREEN 4: SEARCH ==================== -->
+        <div id="screen-search" class="screen no-scrollbar pb-24">
+            <div class="sticky top-0 z-40 bg-darkBg/95 backdrop-blur-lg border-b border-borderSubtle">
                 <div class="flex justify-between items-center px-5 pt-14 pb-4">
-                    <button onclick="navigateTo('screen-home')" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press" aria-label="Kembali">
+                    <button onclick="navigateTo('screen-home')" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press">
                         <i class="fa-solid fa-arrow-left"></i>
                     </button>
                     <h2 class="text-xl font-serif font-bold">Cari Menu</h2>
@@ -211,174 +515,98 @@
 
             <div class="px-5 py-4">
                 <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 textMuted"></i>
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-textMuted"></i>
                     <input type="text" id="search-input" placeholder="Cari makanan favorit..." 
-
+                           class="w-full bg-cardBg text-white py-3.5 pl-12 pr-14 rounded-2xl focus:outline-none focus:ring-2 focus:ring-skyBlue/50 text-sm">
+                    <button class="absolute right-3 top-1/2 -translate-y-1/2 bg-gray-800 p-2 rounded-xl text-skyBlue">
+                        <i class="fa-solid fa-sliders text-xs"></i>
                     </button>
                 </div>
-            </div>
-
-            <!-- Recent Searches -->
-            <div id="recent-searches" class="px-5 mb-4 hidden">
-                <div class="flex justify-between items-center mb-2">
-                    <h4 class="text-sm font-semibold text-textMuted">Pencarian Terakhir</h4>
-                    <button onclick="clearRecentSearches()" class="text-xs text-skyBlue hover:underline">Hapus</button>
-                </div>
-                <div id="recent-search-list" class="flex flex-wrap gap-2"></div>
             </div>
 
             <div class="px-5 mb-4">
                 <div class="flex gap-2 overflow-x-auto no-scrollbar">
-
+                    <button class="search-cat active category-pill px-5 py-2.5 bg-skyBlue text-black rounded-full text-sm font-medium whitespace-nowrap" data-category="all">Semua</button>
+                    <button class="search-cat category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap" data-category="v">Vegan</button>
+                    <button class="search-cat category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap" data-category="m">Daging</button>
+                    <button class="search-cat category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap" data-category="s">Seafood</button>
+                    <button class="search-cat category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap" data-category="d">Minuman</button>
                 </div>
             </div>
 
             <div class="px-5 flex-1">
-                <p id="search-results-count" class="textMuted text-xs mb-4">Menampilkan semua menu</p>
+                <p id="search-results-count" class="text-textMuted text-xs mb-4">Menampilkan semua menu</p>
                 <div id="search-results" class="grid grid-cols-2 gap-3"></div>
-                
-                <!-- Empty State -->
-                <div id="search-empty" class="hidden flex-col items-center justify-center py-12">
-                    <div class="w-20 h-20 bg-cardBg rounded-full flex items-center justify-center mb-4">
-                        <i class="fa-solid fa-search text-3xl text-textMuted"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold mb-2">Tidak Ditemukan</h3>
-                    <p class="text-textMuted text-sm text-center">Coba kata kunci lain atau periksa ejaan</p>
-                </div>
             </div>
 
-
+            <div class="fixed bottom-0 left-0 right-0 bg-cardBg/95 backdrop-blur-xl border-t border-borderSubtle z-50" style="max-width:420px; margin:0 auto;">
                 <div class="flex justify-around items-center py-3 px-4">
                     <button onclick="navigateTo('screen-home')" class="nav-item flex flex-col items-center gap-1 px-4 py-1">
                         <i class="fa-solid fa-house text-xl"></i>
                         <span class="text-[10px] font-medium">Home</span>
                     </button>
-                    <button class="nav-item active flex flex-col items-center gap-1 px-4 py-1" aria-current="page">
+                    <button class="nav-item active flex flex-col items-center gap-1 px-4 py-1">
                         <i class="fa-solid fa-compass text-xl"></i>
                         <span class="text-[10px] font-medium">Explore</span>
                     </button>
                     <button onclick="navigateTo('screen-cart')" class="nav-item flex flex-col items-center gap-1 px-4 py-1 relative">
                         <i class="fa-solid fa-bag-shopping text-xl"></i>
-
+                        <span id="cart-badge-search" class="absolute top-0 right-2 w-4 h-4 bg-skyBlue text-black text-[9px] font-bold rounded-full flex items-center justify-center hidden">0</span>
                         <span class="text-[10px] font-medium">Cart</span>
                     </button>
-                    <button onclick="navigateTo('screen-favorites')" class="nav-item flex flex-col items-center gap-1 px-4 py-1 relative">
-                        <i class="fa-regular fa-heart text-xl"></i>
-                        <span class="text-[10px] font-medium">Favorit</span>
+                    <button class="nav-item flex flex-col items-center gap-1 px-4 py-1">
+                        <i class="fa-regular fa-user text-xl"></i>
+                        <span class="text-[10px] font-medium">Profile</span>
                     </button>
                 </div>
-            </nav>
+            </div>
         </div>
 
-        <!-- ==================== SCREEN 5: FAVORITES ==================== -->
-        <div id="screen-favorites" class="screen no-scrollbar pb-24" role="region" aria-label="Menu Favorit">
+        <!-- ==================== SCREEN 5: CART ==================== -->
+        <div id="screen-cart" class="screen no-scrollbar pb-32">
             <div class="sticky top-0 z-40 bg-darkBg/95 backdrop-blur-lg border-b border-borderSubtle">
                 <div class="flex justify-between items-center px-5 pt-14 pb-4">
-                    <button onclick="navigateBack()" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press" aria-label="Kembali">
-                        <i class="fa-solid fa-arrow-left"></i>
-                    </button>
-                    <h2 class="text-xl font-serif font-bold">Favorit</h2>
-                    <div class="w-11"></div>
-                </div>
-            </div>
-
-            <div id="favorites-content" class="px-5 mt-4 flex-1">
-                <!-- Empty State -->
-                <div id="favorites-empty" class="flex flex-col items-center justify-center py-20">
-                    <div class="w-24 h-24 bg-cardBg rounded-full flex items-center justify-center mb-4">
-                        <i class="fa-regular fa-heart text-4xl text-textMuted"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold mb-2">Belum Ada Favorit</h3>
-                    <p class="text-textMuted text-sm text-center mb-6">Tambahkan menu favoritmu dengan menyentuh ikon hati!</p>
-                    <button onclick="navigateTo('screen-home')" class="bg-skyBlue text-black font-semibold px-6 py-3 rounded-full text-sm btn-press flex items-center gap-2">
-                        <i class="fa-solid fa-utensils"></i>
-                        Jelajahi Menu
-                    </button>
-                </div>
-                
-                <!-- Favorites List -->
-                <div id="favorites-list" class="space-y-3 hidden"></div>
-            </div>
-
-            <nav class="fixed bottom-0 left-0 right-0 bg-cardBg/95 backdrop-blur-xl border-t border-borderSubtle z-50" style="max-width:420px; margin:0 auto;" aria-label="Navigasi utama">
-                <div class="flex justify-around items-center py-3 px-4">
-                    <button onclick="navigateTo('screen-home')" class="nav-item flex flex-col items-center gap-1 px-4 py-1">
-                        <i class="fa-solid fa-house text-xl"></i>
-                        <span class="text-[10px] font-medium">Home</span>
-                    </button>
-                    <button onclick="navigateTo('screen-search')" class="nav-item flex flex-col items-center gap-1 px-4 py-1">
-                        <i class="fa-solid fa-compass text-xl"></i>
-                        <span class="text-[10px] font-medium">Explore</span>
-                    </button>
-                    <button onclick="navigateTo('screen-cart')" class="nav-item flex flex-col items-center gap-1 px-4 py-1 relative">
-                        <i class="fa-solid fa-bag-shopping text-xl"></i>
-                        <span id="cart-badge-fav" class="absolute top-0 right-2 w-4 h-4 bg-skyBlue text-black text-[9px] font-bold rounded-full flex items-center justify-center hidden" aria-live="polite">0</span>
-                        <span class="text-[10px] font-medium">Cart</span>
-                    </button>
-                    <button class="nav-item active flex flex-col items-center gap-1 px-4 py-1 relative" aria-current="page">
-                        <i class="fa-solid fa-heart text-xl"></i>
-                        <span class="text-[10px] font-medium">Favorit</span>
-                    </button>
-                </div>
-            </nav>
-        </div>
-
-
-                <div class="flex justify-between items-center px-5 pt-14 pb-4">
-                    <button onclick="navigateBack()" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press" aria-label="Kembali">
+                    <button onclick="navigateBack()" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press">
                         <i class="fa-solid fa-arrow-left"></i>
                     </button>
                     <h2 class="text-xl font-serif font-bold">Keranjang</h2>
-
+                    <button onclick="clearCart()" class="text-textMuted text-sm">Hapus</button>
+                </div>
             </div>
 
             <div id="cart-items" class="px-5 mt-4 flex-1">
                 <div id="cart-empty" class="flex flex-col items-center justify-center py-20">
                     <div class="w-24 h-24 bg-cardBg rounded-full flex items-center justify-center mb-4">
-                        <i class="fa-solid fa-bag-shopping text-4xl textMuted"></i>
+                        <i class="fa-solid fa-bag-shopping text-4xl text-textMuted"></i>
                     </div>
                     <h3 class="text-lg font-semibold mb-2">Keranjang Kosong</h3>
-
+                    <p class="text-textMuted text-sm text-center mb-6">Yuk mulai pilih menu favoritmu dan pesan sekarang!</p>
+                    <button onclick="navigateTo('screen-home')" class="bg-skyBlue text-black font-semibold px-6 py-3 rounded-full text-sm btn-press">
                         Mulai Pesan
                     </button>
                 </div>
                 <div id="cart-list" class="space-y-3 hidden"></div>
             </div>
 
-
+            <div id="cart-summary" class="fixed bottom-0 left-0 right-0 bg-cardBg/95 backdrop-blur-xl border-t border-borderSubtle p-5 rounded-t-3xl z-50 hidden" style="max-width:420px; margin:0 auto;">
+                <div class="space-y-3 mb-4">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-textMuted">Subtotal</span>
+                        <span id="cart-subtotal">$0.00</span>
                     </div>
                     <div class="flex justify-between text-sm">
-                        <span class="text-textMuted">Diskon</span>
-                        <span id="cart-discount" class="text-success">-$0.00</span>
+                        <span class="text-textMuted">Ongkos Kirim</span>
+                        <span class="text-skyBlue">Gratis</span>
                     </div>
-                    <div class="h-px bg-borderSubtle my-2"></div>
-                    <div class="flex justify-between items-center">
+                    <div class="h-px bg-borderSubtle"></div>
+                    <div class="flex justify-between">
                         <span class="font-semibold">Total</span>
-
+                        <span id="cart-total" class="text-xl font-bold text-skyBlue">$0.00</span>
+                    </div>
+                </div>
+                <button onclick="checkout()" class="w-full bg-skyBlue text-black font-semibold py-4 rounded-2xl text-sm shadow-lg shadow-skyBlue/30 btn-press flex items-center justify-center gap-2">
                     <span>Pesan Sekarang</span>
                     <i class="fa-solid fa-arrow-right"></i>
-                </button>
-                <p class="text-center text-xs text-textMuted mt-3 flex items-center justify-center gap-1">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    Pembayaran aman & terlindungi
-                </p>
-            </div>
-        </div>
-
-        <!-- ==================== CHECKOUT SUCCESS MODAL ==================== -->
-        <div id="checkout-success" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-6 hidden">
-            <div class="bg-cardBg rounded-3xl p-6 w-full max-w-sm text-center animate-bounce-in">
-                <div class="w-20 h-20 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa-solid fa-check text-4xl text-success"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2">Pesanan Berhasil!</h3>
-                <p class="text-textMuted text-sm mb-4">Pesananmu sedang diproses dan akan segera disiapkan oleh dapur kami.</p>
-                <div class="bg-darkBg rounded-2xl p-4 mb-4">
-                    <p class="text-xs text-textMuted mb-1">Estimasi Tiba</p>
-                    <p class="text-lg font-bold text-skyBlue" id="eta-time">15-20 menit</p>
-                </div>
-                <button onclick="closeCheckoutSuccess()" class="w-full bg-skyBlue text-black font-semibold py-4 rounded-2xl btn-press">
-                    Selesai
                 </button>
             </div>
         </div>
@@ -390,91 +618,37 @@
         // ==================== DATA ====================
         const menuItems = {
             'quinoa-bowl': {
-                id: 'quinoa-bowl', title: 'Quinoa Bowl Spesial', price: 14.50, rating: 4.8, calories: 320, time: 20,
+                id: 'quinoa-bowl', title: 'Quinoa Bowl Spesial', price: 14.50, rating: 4.8, calories: 320,
                 image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                 description: 'Hidangan sehat dan lezat yang menggabungkan quinoa organik, alpukat segar, tomat ceri panggang, dan sayuran hijau pilihan.',
-                category: 'v', categoryName: 'Vegan', tags: ['Sehat', 'Organik'], isPopular: true
+                category: 'v'
             },
             'margherita-pizza': {
-                id: 'margherita-pizza', title: 'Rustic Margherita', price: 12.00, rating: 4.7, calories: 850, time: 25,
+                id: 'margherita-pizza', title: 'Rustic Margherita', price: 12.00, rating: 4.7, calories: 850,
                 image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                description: 'Pizza klasik Italia dengan tomat san marzano, mozzarella segar, dan basil pilihan yang dipanggang dengan sempurna.',
-                category: 'm', categoryName: 'Daging', tags: ['Favorit'], isPopular: true
+                description: 'Pizza klasik Italia dengan tomat san marzano, mozzarella segar, dan basil pilihan.',
+                category: 'm'
             },
             'truffle-pasta': {
-                id: 'truffle-pasta', title: 'Pasta Truffle', price: 18.00, rating: 4.9, calories: 720, time: 30,
+                id: 'truffle-pasta', title: 'Pasta Truffle', price: 18.00, rating: 4.9, calories: 720,
                 image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                 description: 'Pasta fettuccine homemade dengan saus krim jamur truffle yang kaya dan gurih.',
-                category: 'm', categoryName: 'Daging', tags: ['Premium'], isPopular: true
+                category: 'm'
             },
             'avocado-toast': {
-                id: 'avocado-toast', title: 'Avocado Toast', price: 8.50, rating: 4.6, calories: 280, time: 15,
+                id: 'avocado-toast', title: 'Avocado Toast', price: 8.50, rating: 4.6, calories: 280,
                 image: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                 description: 'Roti sourdough panggang dengan alpukat segar yang dihaluskan.',
-                category: 'v', categoryName: 'Vegan', tags: ['Ringan'], isPopular: true
-            },
-            'grilled-salmon': {
-                id: 'grilled-salmon', title: 'Grilled Salmon', price: 22.00, rating: 4.9, calories: 450, time: 25,
-                image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                description: 'Salmon panggang premium dengan herbs segar, disajikan dengan sayuran panggang.',
-                category: 's', categoryName: 'Seafood', tags: ['Protein Tinggi'], isPopular: true
-            },
-            'beef-steak': {
-                id: 'beef-steak', title: 'Premium Beef Steak', price: 28.00, rating: 4.8, calories: 680, time: 35,
-                image: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                description: 'Steak sapi premium dimasak sesuai keinginan, disajikan dengan kentang panggang.',
-                category: 'm', categoryName: 'Daging', tags: ['Premium'], isPopular: false
-            },
-            'green-smoothie': {
-                id: 'green-smoothie', title: 'Green Power Smoothie', price: 6.50, rating: 4.5, calories: 180, time: 5,
-                image: 'https://images.unsplash.com/photo-1610970881699-44a5587cabec?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                description: 'Smoothie sehat dari bayam, pisang, almond milk, dan madu murni.',
-                category: 'd', categoryName: 'Minuman', tags: ['Sehat'], isPopular: false
-            },
-            'matcha-latte': {
-                id: 'matcha-latte', title: 'Matcha Latte', price: 5.50, rating: 4.7, calories: 150, time: 5,
-                image: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                description: 'Matcha premium Jepang dicampur dengan susu steamed.',
-                category: 'd', categoryName: 'Minuman', tags: ['Trending'], isPopular: true
-            },
-            'shrimp-tempura': {
-                id: 'shrimp-tempura', title: 'Shrimp Tempura', price: 16.00, rating: 4.8, calories: 420, time: 20,
-                image: 'https://images.unsplash.com/photo-1615361200141-f45040f367be?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                description: 'Udang jumbo dengan lapisan tempura renyah.',
-                category: 's', categoryName: 'Seafood', tags: ['Renyah'], isPopular: true
+                category: 'v'
             }
         };
 
-        const categoryNames = { v: 'Vegan', m: 'Daging', s: 'Seafood', d: 'Minuman', all: 'Semua' };
-
         // ==================== STATE ====================
         let cart = [];
-        let favorites = [];
         let currentDetailItem = null;
         let quantity = 1;
-        let recentSearches = [];
-        let deliveryFee = 0;
-        let discount = 0;
         let previousScreen = 'screen-home';
         let isFavorite = false;
-
-        // ==================== LOCAL STORAGE ====================
-        function saveToStorage() {
-            localStorage.setItem('trumada_cart', JSON.stringify(cart));
-            localStorage.setItem('trumada_favorites', JSON.stringify(favorites));
-            localStorage.setItem('trumada_recent_searches', JSON.stringify(recentSearches));
-        }
-
-        function loadFromStorage() {
-            try {
-                const savedCart = localStorage.getItem('trumada_cart');
-                const savedFavorites = localStorage.getItem('trumada_favorites');
-                const savedSearches = localStorage.getItem('trumada_recent_searches');
-                if (savedCart) cart = JSON.parse(savedCart);
-                if (savedFavorites) favorites = JSON.parse(savedFavorites);
-                if (savedSearches) recentSearches = JSON.parse(savedSearches);
-            } catch (e) { console.warn('Error loading from storage:', e); }
-        }
 
         // ==================== NAVIGATION ====================
         function navigateTo(screenId) {
@@ -485,119 +659,11 @@
                 target.classList.add('active', 'screen-enter');
                 target.scrollTop = 0;
                 if (screenId === 'screen-cart') renderCart();
-                if (screenId === 'screen-search') { renderSearchResults(); renderRecentSearches(); }
-                if (screenId === 'screen-favorites') renderFavorites();
-                if (screenId === 'screen-home') renderHomeMenu();
+                if (screenId === 'screen-search') renderSearchResults();
             }
         }
 
         function navigateBack() { navigateTo(previousScreen); }
-
-        // ==================== HOME MENU ====================
-        function renderHomeMenu() {
-            const container = document.getElementById('home-menu-list');
-            if (!container) return;
-            const popularItems = Object.values(menuItems).filter(item => item.isPopular);
-            container.innerHTML = popularItems.map(item => `
-                <div class="menu-item bg-cardBg p-4 rounded-2xl flex items-center gap-4 cursor-pointer" onclick="openDetail('${item.id}')">
-                    <div class="relative">
-                        <img src="${item.image}" alt="${item.title}" class="w-20 h-20 rounded-2xl object-cover">
-                        ${item.isPopular ? '<span class="absolute -top-2 -right-2 bg-warning text-black text-[8px] font-bold px-1.5 py-0.5 rounded-full"><i class="fa-solid fa-fire"></i></span>' : ''}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <h5 class="font-semibold text-sm truncate">${item.title}</h5>
-                        <p class="text-textMuted text-xs mt-0.5 line-clamp-1">${item.description}</p>
-                        <div class="flex items-center gap-2 mt-1">
-                            <span class="flex items-center gap-0.5 text-xs"><i class="fa-solid fa-star text-yellow-400"></i>${item.rating}</span>
-                            <span class="text-textMuted text-xs">•</span>
-                            <span class="text-textMuted text-xs flex items-center gap-0.5"><i class="fa-solid fa-fire text-red-400"></i>${item.calories} kcal</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end gap-2">
-                        <span class="text-skyBlue font-bold">$${item.price.toFixed(2)}</span>
-                        <button onclick="event.stopPropagation(); addToCart('${item.id}')" class="w-8 h-8 bg-skyBlue rounded-lg flex items-center justify-center btn-press hover:bg-skyBlueDark">
-                            <i class="fa-solid fa-plus text-black text-sm"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // ==================== FAVORITES ====================
-        function updateFavoritesBadge() {
-            const count = favorites.length;
-            ['favorites-badge', 'favorites-badge-nav'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) { el.textContent = count; el.classList.toggle('hidden', count === 0); }
-            });
-        }
-
-        function renderFavorites() {
-            const emptyState = document.getElementById('favorites-empty');
-            const listContainer = document.getElementById('favorites-list');
-            if (favorites.length === 0) {
-                emptyState.classList.remove('hidden');
-                listContainer.classList.add('hidden');
-                return;
-            }
-            emptyState.classList.add('hidden');
-            listContainer.classList.remove('hidden');
-            const favItems = favorites.map(id => menuItems[id]).filter(Boolean);
-            listContainer.innerHTML = favItems.map(item => `
-                <div class="menu-item bg-cardBg p-4 rounded-2xl flex items-center gap-4 cursor-pointer" onclick="openDetail('${item.id}')">
-                    <img src="${item.image}" alt="${item.title}" class="w-20 h-20 rounded-2xl object-cover">
-                    <div class="flex-1 min-w-0">
-                        <h5 class="font-semibold text-sm truncate">${item.title}</h5>
-                        <p class="text-textMuted text-xs mt-0.5 line-clamp-1">${item.description}</p>
-                        <div class="flex items-center gap-2 mt-1">
-                            <span class="flex items-center gap-0.5 text-xs"><i class="fa-solid fa-star text-yellow-400"></i>${item.rating}</span>
-                            <span class="text-textMuted text-xs">•</span>
-                            <span class="text-textMuted text-xs">${item.calories} kcal</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end gap-2">
-                        <span class="text-skyBlue font-bold">$${item.price.toFixed(2)}</span>
-                        <button onclick="event.stopPropagation(); removeFavorite('${item.id}')" class="w-8 h-8 bg-danger/20 rounded-lg flex items-center justify-center btn-press hover:bg-danger/30">
-                            <i class="fa-solid fa-trash text-danger text-sm"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-            updateFavoritesBadge();
-        }
-
-        function removeFavorite(itemId) {
-            favorites = favorites.filter(id => id !== itemId);
-            updateFavoritesBadge();
-            renderFavorites();
-            saveToStorage();
-            showToast('Dihapus dari favorit', 'error');
-        }
-
-        // ==================== RECENT SEARCHES ====================
-        function renderRecentSearches() {
-            const container = document.getElementById('recent-searches');
-            const listContainer = document.getElementById('recent-search-list');
-            if (recentSearches.length === 0) { container.classList.add('hidden'); return; }
-            container.classList.remove('hidden');
-            listContainer.innerHTML = recentSearches.map(term => `
-                <button onclick="searchFromRecent('${term}')" class="flex items-center gap-2 bg-cardBg px-3 py-2 rounded-full text-sm text-textMuted hover:text-white hover:bg-cardHover transition-colors">
-                    <i class="fa-solid fa-clock-rotate-left text-xs"></i>
-                    <span>${term}</span>
-                </button>
-            `).join('');
-        }
-
-        function searchFromRecent(term) {
-            const input = document.getElementById('search-input');
-            if (input) { input.value = term; renderSearchResults(document.querySelector('.search-cat.active')?.dataset.category || 'all', term); }
-        }
-
-        function clearRecentSearches() {
-            recentSearches = [];
-            saveToStorage();
-            renderRecentSearches();
-        }
 
         // ==================== DETAIL ====================
         function openDetail(itemId) {
@@ -623,8 +689,8 @@
             updateDetailPrice();
             const minusBtn = document.getElementById('qty-minus');
             minusBtn.className = quantity <= 1 
-                ? 'qty-btn w-9 h-9 rounded-xl bg-darkBg flex items-center justify-center textMuted opacity-50'
-                : 'qty-btn w-9 h-9 rounded-xl bg-darkBg flex items-center justify-center text-primary';
+                ? 'qty-btn w-9 h-9 rounded-xl bg-darkBg flex items-center justify-center text-textMuted opacity-50'
+                : 'qty-btn w-9 h-9 rounded-xl bg-darkBg flex items-center justify-center text-white';
         }
 
         function updateDetailPrice() {
@@ -635,20 +701,10 @@
         }
 
         function toggleFavorite() {
-            if (!currentDetailItem) return;
             isFavorite = !isFavorite;
             const btn = document.getElementById('detail-favorite');
-            btn.innerHTML = isFavorite ? '<i class="fa-solid fa-heart text-danger"></i>' : '<i class="fa-regular fa-heart"></i>';
-            
-            if (isFavorite) {
-                if (!favorites.includes(currentDetailItem.id)) favorites.push(currentDetailItem.id);
-                showToast('Ditambahkan ke favorit', 'success');
-            } else {
-                favorites = favorites.filter(id => id !== currentDetailItem.id);
-                showToast('Dihapus dari favorit', 'error');
-            }
-            updateFavoritesBadge();
-            saveToStorage();
+            btn.innerHTML = isFavorite ? '<i class="fa-solid fa-heart text-red-500"></i>' : '<i class="fa-regular fa-heart"></i>';
+            showToast(isFavorite ? 'Ditambahkan ke favorit' : 'Dihapus dari favorit');
         }
 
         // ==================== CART ====================
@@ -656,10 +712,10 @@
             const item = menuItems[itemId];
             if (!item) return;
             const existing = cart.find(c => c.id === itemId);
-            if (existing) { existing.qty += 1; showToast(`${item.title} +1`, 'success'); }
-            else { cart.push({ ...item, qty: 1 }); showToast(`${item.title} ditambahkan`, 'success'); }
+            if (existing) existing.qty += 1;
+            else cart.push({ ...item, qty: 1 });
             updateCartBadge();
-            saveToStorage();
+            showToast(`${item.title} ditambahkan`);
         }
 
         function addToCartFromDetail() {
@@ -668,8 +724,7 @@
             if (existing) existing.qty += quantity;
             else cart.push({ ...currentDetailItem, qty: quantity });
             updateCartBadge();
-            saveToStorage();
-            showToast(`${currentDetailItem.title} ditambahkan ke keranjang`, 'success');
+            showToast(`${currentDetailItem.title} ditambahkan ke keranjang`);
             setTimeout(() => navigateTo('screen-cart'), 500);
         }
 
@@ -677,22 +732,18 @@
             cart = cart.filter(c => c.id !== itemId);
             updateCartBadge();
             renderCart();
-            saveToStorage();
         }
 
         function updateCartItemQty(itemId, delta) {
             const item = cart.find(c => c.id === itemId);
-            if (item) { item.qty = Math.max(1, item.qty + delta); renderCart(); saveToStorage(); }
+            if (item) { item.qty = Math.max(1, item.qty + delta); renderCart(); }
         }
 
-        function clearCart() {
-            if (cart.length === 0) return;
-            if (confirm('Hapus semua item dari keranjang?')) { cart = []; updateCartBadge(); renderCart(); saveToStorage(); showToast('Keranjang dikosongkan', 'error'); }
-        }
+        function clearCart() { cart = []; updateCartBadge(); renderCart(); }
 
         function updateCartBadge() {
             const total = cart.reduce((sum, item) => sum + item.qty, 0);
-            ['cart-badge-home', 'cart-badge-nav', 'cart-badge-search', 'cart-badge-fav'].forEach(id => {
+            ['cart-badge-home', 'cart-badge-nav', 'cart-badge-search'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) { el.textContent = total; el.classList.toggle('hidden', total === 0); }
             });
@@ -719,14 +770,14 @@
                     <img src="${item.image}" alt="${item.title}" class="w-20 h-20 rounded-2xl object-cover">
                     <div class="flex-1 min-w-0">
                         <h5 class="font-semibold text-sm truncate">${item.title}</h5>
-                        <p class="text-skyLight text-sm font-medium mt-0.5">$${(item.price * item.qty).toFixed(2)}</p>
+                        <p class="text-skyBlue text-sm font-medium mt-0.5">$${(item.price * item.qty).toFixed(2)}</p>
                     </div>
                     <div class="flex items-center gap-2 bg-darkBg rounded-xl p-1">
-                        <button onclick="updateCartItemQty('${item.id}', -1)" class="w-7 h-7 rounded-lg flex items-center justify-center textMuted hover:text-primary">
+                        <button onclick="updateCartItemQty('${item.id}', -1)" class="w-7 h-7 rounded-lg flex items-center justify-center text-textMuted hover:text-white">
                             <i class="fa-solid fa-minus text-xs"></i>
                         </button>
                         <span class="font-medium text-sm w-5 text-center">${item.qty}</span>
-                        <button onclick="updateCartItemQty('${item.id}', 1)" class="w-7 h-7 rounded-lg flex items-center justify-center bg-skyLight text-darkBg">
+                        <button onclick="updateCartItemQty('${item.id}', 1)" class="w-7 h-7 rounded-lg flex items-center justify-center bg-skyBlue text-black">
                             <i class="fa-solid fa-plus text-xs"></i>
                         </button>
                     </div>
@@ -740,22 +791,12 @@
 
         function checkout() {
             if (cart.length === 0) return;
-            const modal = document.getElementById('checkout-success');
-            const eta = document.getElementById('eta-time');
-            if (modal && eta) {
-                eta.textContent = deliveryFee > 0 ? '15-20 menit' : '30-45 menit';
-                modal.classList.remove('hidden');
-            }
-            cart = [];
-            updateCartBadge();
-            saveToStorage();
-        }
-
-        function closeCheckoutSuccess() {
-            const modal = document.getElementById('checkout-success');
-            if (modal) modal.classList.add('hidden');
-            navigateTo('screen-home');
-            showToast('Terima kasih! Pesananmu sedang dibuat 🎉', 'success');
+            showToast('Pesanan berhasil! Sedang diproses...');
+            setTimeout(() => {
+                cart = []; updateCartBadge();
+                navigateTo('screen-home');
+                showToast('Terima kasih! Pesananmu sedang dibuat 🎉');
+            }, 1000);
         }
 
         // ==================== SEARCH ====================
@@ -774,15 +815,15 @@
                 <div class="bg-cardBg rounded-3xl p-4 cursor-pointer menu-item" onclick="openDetail('${item.id}')">
                     <div class="relative -mt-4 mb-3">
                         <img src="${item.image}" alt="${item.title}" class="w-full h-32 object-cover rounded-2xl">
-                        <span class="absolute top-2 right-2 bg-skyDark/70 text-primary text-[10px] px-2 py-1 rounded-lg flex items-center">
-                            <i class="fa-solid fa-star text-skyLight mr-1 text-xs"></i>${item.rating}
+                        <span class="absolute top-2 right-2 bg-black/70 text-white text-[10px] px-2 py-1 rounded-lg flex items-center">
+                            <i class="fa-solid fa-star text-skyBlue mr-1 text-xs"></i>${item.rating}
                         </span>
                     </div>
                     <h5 class="font-semibold text-sm mb-1">${item.title}</h5>
                     <div class="flex justify-between items-center">
-                        <span class="text-skyLight font-bold">$${item.price.toFixed(2)}</span>
-                        <button onclick="event.stopPropagation(); addToCart('${item.id}')" class="w-8 h-8 bg-skyLight rounded-lg flex items-center justify-center btn-press">
-                            <i class="fa-solid fa-plus text-darkBg text-xs"></i>
+                        <span class="text-skyBlue font-bold">$${item.price.toFixed(2)}</span>
+                        <button onclick="event.stopPropagation(); addToCart('${item.id}')" class="w-8 h-8 bg-skyBlue rounded-lg flex items-center justify-center btn-press">
+                            <i class="fa-solid fa-plus text-black text-xs"></i>
                         </button>
                     </div>
                 </div>
@@ -790,27 +831,15 @@
         }
 
         // ==================== TOAST ====================
-        function showToast(message, type = 'success') {
+        function showToast(message) {
             const toast = document.getElementById('toast');
-            const icon = toast.querySelector('i');
             document.getElementById('toast-message').textContent = message;
-            toast.classList.remove('success', 'error');
-            toast.classList.add(type);
-            if (type === 'success') icon.className = 'fa-solid fa-check-circle text-success';
-            else if (type === 'error') icon.className = 'fa-solid fa-times-circle text-danger';
-            else icon.className = 'fa-solid fa-info-circle text-skyBlue';
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
         // ==================== INIT ====================
         document.addEventListener('DOMContentLoaded', () => {
-            loadFromStorage();
-            updateCartBadge();
-            updateFavoritesBadge();
-            renderHomeMenu();
-            renderSearchResults();
-            
             const searchInput = document.getElementById('search-input');
             if (searchInput) {
                 searchInput.addEventListener('input', (e) => {
@@ -823,14 +852,7 @@
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.search-cat').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    const query = searchInput?.value || '';
-                    renderSearchResults(btn.dataset.category, query);
-                    if (query && !recentSearches.includes(query)) {
-                        recentSearches.unshift(query);
-                        if (recentSearches.length > 5) recentSearches.pop();
-                        saveToStorage();
-                        renderRecentSearches();
-                    }
+                    renderSearchResults(btn.dataset.category, searchInput?.value || '');
                 });
             });
             
