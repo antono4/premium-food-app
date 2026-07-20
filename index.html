@@ -17,221 +17,7 @@
             theme: {
                 extend: {
                     colors: {
-                        darkBg: '#0D0D0D',
-                        cardBg: '#1A1A1A',
-                        cardHover: '#252525',
-                        skyBlue: '#38BDF8',
-                        skyBlueLight: '#7DD3FC',
-                        skyBlueDark: '#0EA5E9',
-                        textMuted: '#8A8A8A',
-                        textLight: '#E5E5E5',
-                        borderSubtle: '#2A2A2A',
-                        success: '#22C55E',
-                        warning: '#F59E0B',
-                        danger: '#EF4444',
-                    },
-                    fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    },
-                    borderRadius: {
-                        '2xl': '1rem',
-                        '3xl': '1.5rem',
-                        '4xl': '2rem',
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'bounce-in': 'bounceIn 0.5s cubic-bezier(0.32, 0.72, 0, 1)',
-                        'slide-up': 'slideUp 0.35s cubic-bezier(0.32, 0.72, 0, 1)',
-                        'fade-in': 'fadeIn 0.3s ease-out',
-                    },
-                    keyframes: {
-                        bounceIn: {
-                            '0%': { transform: 'scale(0.3)', opacity: '0' },
-                            '50%': { transform: 'scale(1.05)' },
-                            '70%': { transform: 'scale(0.9)' },
-                            '100%': { transform: 'scale(1)', opacity: '1' },
-                        },
-                        slideUp: {
-                            from: { transform: 'translateY(20px)', opacity: '0' },
-                            to: { transform: 'translateY(0)', opacity: '1' },
-                        },
-                        fadeIn: {
-                            from: { opacity: '0' },
-                            to: { opacity: '1' },
-                        },
-                    },
-                }
-            }
-        }
-    </script>
-    <style>
-        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
-        
-        html { scroll-behavior: smooth; }
-        
-        body {
-            background: linear-gradient(135deg, #0c1929 0%, #1e3a5f 100%);
-            min-height: 100vh;
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-        }
 
-        .phone-container {
-            width: 100%;
-            max-width: 420px;
-            min-height: 100vh;
-            background-color: #0D0D0D;
-            margin: 0 auto;
-            position: relative;
-            overflow: hidden;
-        }
-
-        @media (min-width: 768px) {
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 20px;
-            }
-            .phone-container {
-                height: 90vh;
-                max-height: 900px;
-                border-radius: 40px;
-                border: 8px solid #2a2a2a;
-                box-shadow: 0 25px 80px rgba(0,0,0,0.5), 0 0 100px rgba(56, 189, 248, 0.1);
-            }
-        }
-
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        .screen {
-            display: none;
-            height: 100%;
-            width: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            background-color: #0D0D0D;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        .screen.active { display: flex; flex-direction: column; }
-
-        .screen-enter { animation: slideIn 0.35s cubic-bezier(0.32, 0.72, 0, 1); }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        .screen-exit { animation: slideOut 0.25s ease-in forwards; }
-        @keyframes slideOut {
-            from { opacity: 1; transform: translateX(0); }
-            to { opacity: 0; transform: translateX(-30px); }
-        }
-
-        .food-img { border-radius: 16px; object-fit: cover; }
-        .img-shadow { filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5)); }
-        .card-shadow { box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
-
-        .btn-press { transition: transform 0.15s, box-shadow 0.15s, background-color 0.2s; }
-        .btn-press:active { transform: scale(0.96); }
-        .btn-press:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .nav-item { transition: all 0.2s; opacity: 0.6; }
-        .nav-item.active { opacity: 1; color: #38BDF8; }
-        .nav-item:hover { opacity: 1; }
-
-        .toast {
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #1A1A1A;
-            color: white;
-            padding: 14px 24px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 500;
-            z-index: 1000;
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid #2A2A2A;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-        }
-        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-        .toast.error { border-color: #EF4444; }
-        .toast.success { border-color: #22C55E; }
-
-        .category-pill { transition: all 0.2s; }
-        .category-pill.active { background: #38BDF8 !important; color: #0D0D0D !important; }
-
-        .menu-item { transition: background 0.2s, transform 0.2s; }
-        .menu-item:active { background: #252525; transform: scale(0.98); }
-
-        .qty-btn { transition: all 0.15s; }
-        .qty-btn:active { transform: scale(0.9); }
-
-        .float-slow { animation: floatSlow 6s ease-in-out infinite; }
-        @keyframes floatSlow {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(3deg); }
-        }
-        
-        .favorite-btn { transition: all 0.2s; }
-        .favorite-btn.active { color: #EF4444; }
-        .favorite-btn.active i { font-weight: 900; }
-        
-        .skeleton {
-            background: linear-gradient(90deg, #1A1A1A 25%, #252525 50%, #1A1A1A 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        
-        .badge-pulse {
-            animation: badgePulse 0.3s ease-out;
-        }
-        @keyframes badgePulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
-        }
-        
-        .gradient-border {
-            background: linear-gradient(135deg, #38BDF8, #0EA5E9);
-            padding: 2px;
-            border-radius: inherit;
-        }
-        
-        .promo-shimmer {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            background-size: 200% 100%;
-            animation: promoShimmer 2s infinite;
-        }
-        @keyframes promoShimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Skip to main content for accessibility -->
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-skyBlue focus:text-black focus:px-4 focus:py-2 focus:rounded-lg">
-        Langsung ke konten utama
-    </a>
-
-    <div id="toast" class="toast" role="alert" aria-live="polite">
-        <i class="fa-solid fa-check-circle text-skyBlue"></i>
         <span id="toast-message">Item ditambahkan</span>
     </div>
 
@@ -240,9 +26,7 @@
         <!-- ==================== SCREEN 1: LOGIN/SPLASH ==================== -->
         <div id="screen-login" class="screen active flex-col items-center justify-center px-6" role="region" aria-label="Selamat Datang">
             <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                <div class="absolute -top-20 -right-20 w-64 h-64 bg-skyBlue/5 rounded-full blur-3xl"></div>
-                <div class="absolute -bottom-32 -left-20 w-80 h-80 bg-skyBlue/5 rounded-full blur-3xl"></div>
-                <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-96 h-96 bg-skyBlue/3 rounded-full blur-3xl"></div>
+
             </div>
 
             <div class="relative z-10 text-center -mt-16 animate-fade-in">
@@ -252,64 +36,34 @@
                     </span>
                 </div>
                 <h1 class="text-5xl font-serif font-bold mb-1 tracking-tight">Trumada</h1>
-                <p class="text-textMuted text-sm tracking-widest uppercase">Premium Culinary</p>
+                <p class="textMuted text-sm tracking-widest uppercase">Premium Culinary</p>
             </div>
             
             <div class="relative w-full max-w-xs mx-auto my-10">
-                <div class="absolute inset-0 bg-skyBlue/10 rounded-3xl blur-2xl transform scale-95"></div>
-                <div class="relative overflow-hidden rounded-3xl">
-                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                         alt="Quinoa Bowl - Hidangan andalan kami" class="relative w-full h-64 object-cover img-shadow">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-3xl"></div>
-                </div>
-                <div class="absolute -top-3 -right-3 bg-skyBlue text-black text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1">
-                    <i class="fa-solid fa-fire"></i> Populer
-                </div>
-                <div class="absolute bottom-4 left-4 bg-black/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1">
-                    <i class="fa-solid fa-star text-yellow-400"></i> 4.9 (2.5k+)
-                </div>
-                <div class="absolute bottom-4 right-4 bg-success/90 text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1">
-                    <i class="fa-solid fa-clock"></i> 20 menit
-                </div>
-            </div>
-            
-            <div class="flex justify-center gap-6 mb-8 text-center">
-                <div class="flex flex-col items-center group">
-                    <div class="w-14 h-14 bg-cardBg rounded-2xl flex items-center justify-center mb-2 transition-transform group-hover:scale-110">
-                        <i class="fa-solid fa-truck-fast text-skyBlue text-lg"></i>
+
                     </div>
-                    <span class="text-xs text-textMuted">Gratis<br>Ongkir</span>
+                    <span class="text-xs textMuted">Gratis<br>Ongkir</span>
                 </div>
-                <div class="flex flex-col items-center group">
-                    <div class="w-14 h-14 bg-cardBg rounded-2xl flex items-center justify-center mb-2 transition-transform group-hover:scale-110">
-                        <i class="fa-solid fa-certificate text-skyBlue text-lg"></i>
+
                     </div>
-                    <span class="text-xs text-textMuted">Premium<br>Kualitas</span>
+                    <span class="text-xs textMuted">Premium<br>Kualitas</span>
                 </div>
-                <div class="flex flex-col items-center group">
-                    <div class="w-14 h-14 bg-cardBg rounded-2xl flex items-center justify-center mb-2 transition-transform group-hover:scale-110">
-                        <i class="fa-solid fa-shield-halved text-skyBlue text-lg"></i>
-                    </div>
-                    <span class="text-xs text-textMuted">Higienis<br>&amp; Aman</span>
+
                 </div>
             </div>
             
             <div class="w-full max-w-xs space-y-3 mt-4">
-                <button onclick="navigateTo('screen-home')" class="w-full bg-skyBlue text-black font-semibold py-4 rounded-2xl text-base shadow-lg shadow-skyBlue/30 btn-press flex items-center justify-center gap-2" aria-label="Mulai pesan makanan">
+
                     <span>Mulai Pesan</span>
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
-                <div class="flex items-center justify-center gap-4 text-sm text-textMuted mt-6">
+                <div class="flex items-center justify-center gap-4 text-sm textMuted mt-6">
                     <div class="flex-1 h-px bg-borderSubtle"></div>
                     <span>atau</span>
                     <div class="flex-1 h-px bg-borderSubtle"></div>
                 </div>
                 <div class="flex gap-3 mt-3">
-                    <button class="flex-1 bg-cardBg py-3.5 rounded-2xl flex items-center justify-center gap-2 text-sm border border-borderSubtle btn-press hover:bg-cardHover transition-colors" aria-label="Masuk dengan Apple">
-                        <i class="fa-brands fa-apple text-lg"></i>
-                        <span>Apple</span>
-                    </button>
-                    <button class="flex-1 bg-cardBg py-3.5 rounded-2xl flex items-center justify-center gap-2 text-sm border border-borderSubtle btn-press hover:bg-cardHover transition-colors" aria-label="Masuk dengan Google">
+
                         <i class="fa-brands fa-google text-lg"></i>
                         <span>Google</span>
                     </button>
@@ -324,124 +78,9 @@
         <!-- ==================== SCREEN 2: HOME ==================== -->
         <div id="screen-home" class="screen no-scrollbar pb-24" role="region" aria-label="Halaman Utama">
             <!-- Header -->
-            <div class="sticky top-0 z-40 bg-darkBg/95 backdrop-blur-lg border-b border-borderSubtle">
+            <div class="sticky top-0 z-40 bg-darkBg/95 backdrop-blur-lg border-b border-borderLight">
                 <div class="flex justify-between items-center px-5 pt-14 pb-4">
-                    <div>
-                        <p class="text-textMuted text-xs">Selamat Datang 👋</p>
-                        <h2 class="text-xl font-serif font-bold">Trumada</h2>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <button onclick="navigateTo('screen-search')" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press" aria-label="Cari menu">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                        <button onclick="navigateTo('screen-favorites')" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press relative" aria-label="Favorit saya">
-                            <i class="fa-solid fa-heart"></i>
-                            <span id="favorites-badge" class="absolute -top-1 -right-1 w-4 h-4 bg-danger text-white text-[9px] font-bold rounded-full flex items-center justify-center hidden">0</span>
-                        </button>
-                        <button onclick="navigateTo('screen-cart')" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press relative" aria-label="Keranjang belanja">
-                            <i class="fa-solid fa-bag-shopping"></i>
-                            <span id="cart-badge-home" class="absolute -top-1 -right-1 w-5 h-5 bg-skyBlue text-black text-[10px] font-bold rounded-full flex items-center justify-center hidden" aria-live="polite">0</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Promo Banner -->
-            <div class="px-5 mt-4 mb-4">
-                <div class="relative bg-gradient-to-r from-skyBlue/20 via-skyBlue/10 to-skyBlue/5 rounded-3xl p-5 overflow-hidden border border-skyBlue/20">
-                    <div class="absolute top-0 right-0 w-40 h-40 bg-skyBlue/10 rounded-full -translate-y-1/2 translate-x-1/4"></div>
-                    <div class="absolute bottom-0 left-0 w-24 h-24 bg-skyBlue/10 rounded-full translate-y-1/2 -translate-x-1/4"></div>
-                    <div class="promo-shimmer absolute inset-0 rounded-3xl"></div>
-                    <div class="relative flex items-center gap-4">
-                        <div class="w-14 h-14 bg-skyBlue/20 rounded-2xl flex items-center justify-center">
-                            <i class="fa-solid fa-percent text-skyBlue text-xl"></i>
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-sm">Diskon 20%!</h4>
-                            <p class="text-textMuted text-xs mt-0.5">Untuk pembelian pertama</p>
-                        </div>
-                        <button class="bg-skyBlue text-black text-xs font-bold px-4 py-2 rounded-xl btn-press">
-                            Klaim
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Featured Banner -->
-            <div class="px-5 mb-6">
-                <div class="relative bg-gradient-to-br from-skyBlue/20 to-skyBlue/5 rounded-3xl p-5 overflow-hidden cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]" onclick="openDetail('quinoa-bowl')" role="button" tabindex="0" aria-label="Lihat detail Quinoa Bowl">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-skyBlue/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-                    <div class="flex items-center gap-4">
-                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" 
-                             alt="Quinoa Bowl" class="w-24 h-24 rounded-2xl object-cover img-shadow float-slow">
-                        <div class="flex-1">
-                            <span class="inline-flex items-center gap-1 text-skyBlue text-xs font-semibold bg-skyBlue/10 px-2 py-1 rounded-full">
-                                <i class="fa-solid fa-sparkles"></i> Rekomendasi
-                            </span>
-                            <h3 class="text-lg font-serif font-bold mt-2">Quinoa Bowl</h3>
-                            <p class="text-textMuted text-xs mt-1 line-clamp-2">Sayuran segar dengan protein nabati pilihan</p>
-                            <div class="flex items-center gap-3 mt-2">
-                                <span class="text-skyBlue font-bold">$14.50</span>
-                                <span class="text-textMuted text-xs">•</span>
-                                <span class="text-textMuted text-xs flex items-center gap-1">
-                                    <i class="fa-regular fa-clock text-xs"></i>20 menit
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Categories -->
-            <div class="px-5 mb-6">
-                <div class="flex gap-3 overflow-x-auto no-scrollbar pb-1">
-                    <button class="category-pill active px-5 py-2.5 bg-cardBg rounded-full text-sm font-medium whitespace-nowrap" data-category="all">Semua</button>
-                    <button class="category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap" data-category="v">
-                        <i class="fa-solid fa-leaf mr-1 text-xs"></i>Vegan
-                    </button>
-                    <button class="category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap" data-category="m">
-                        <i class="fa-solid fa-drumstick-bite mr-1 text-xs"></i>Daging
-                    </button>
-                    <button class="category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap" data-category="s">
-                        <i class="fa-solid fa-fish mr-1 text-xs"></i>Seafood
-                    </button>
-                    <button class="category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap" data-category="d">
-                        <i class="fa-solid fa-mug-hot mr-1 text-xs"></i>Minuman
-                    </button>
-                </div>
-            </div>
-
-            <!-- Popular Menu -->
-            <div class="px-5 flex-1">
-                <div class="flex justify-between items-center mb-4">
-                    <h4 class="text-lg font-semibold flex items-center gap-2">
-                        <i class="fa-solid fa-fire text-warning"></i>
-                        Menu Populer
-                    </h4>
-                    <button onclick="navigateTo('screen-search')" class="text-skyBlue text-xs font-medium flex items-center gap-1">
-                        Lihat Semua <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                    </button>
-                </div>
-                
-                <div id="home-menu-list" class="space-y-3">
-                    <!-- Menu items will be rendered by JavaScript -->
-                </div>
-            </div>
-            
-            <!-- Bottom Navigation -->
-            <nav class="fixed bottom-0 left-0 right-0 bg-cardBg/95 backdrop-blur-xl border-t border-borderSubtle z-50" style="max-width:420px; margin:0 auto;" aria-label="Navigasi utama">
-                <div class="flex justify-around items-center py-3 px-4">
-                    <button onclick="navigateTo('screen-home')" class="nav-item active flex flex-col items-center gap-1 px-4 py-1" aria-current="page">
-                        <i class="fa-solid fa-house text-xl"></i>
-                        <span class="text-[10px] font-medium">Home</span>
-                    </button>
-                    <button onclick="navigateTo('screen-search')" class="nav-item flex flex-col items-center gap-1 px-4 py-1">
-                        <i class="fa-solid fa-compass text-xl"></i>
-                        <span class="text-[10px] font-medium">Explore</span>
-                    </button>
-                    <button onclick="navigateTo('screen-cart')" class="nav-item flex flex-col items-center gap-1 px-4 py-1 relative">
-                        <i class="fa-solid fa-bag-shopping text-xl"></i>
-                        <span id="cart-badge-nav" class="absolute top-0 right-2 w-4 h-4 bg-skyBlue text-black text-[9px] font-bold rounded-full flex items-center justify-center hidden" aria-live="polite">0</span>
                         <span class="text-[10px] font-medium">Cart</span>
                     </button>
                     <button onclick="navigateTo('screen-favorites')" class="nav-item flex flex-col items-center gap-1 px-4 py-1 relative">
@@ -473,14 +112,7 @@
                     <img id="detail-image" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
                          alt="Food Detail" class="w-full h-64 object-cover rounded-3xl img-shadow">
                     <div class="absolute bottom-4 left-4 flex gap-2">
-                        <span class="bg-black/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1">
-                            <i class="fa-solid fa-star text-yellow-400"></i> <span id="detail-rating">4.8</span>
-                        </span>
-                        <span class="bg-black/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1">
-                            <i class="fa-solid fa-fire text-red-400"></i> <span id="detail-calories">320</span> kcal
-                        </span>
-                        <span id="detail-time-badge" class="bg-black/70 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1">
-                            <i class="fa-regular fa-clock text-skyBlue"></i> <span id="detail-time">20</span> menit
+
                         </span>
                     </div>
                     <div id="detail-category-badge" class="absolute top-4 left-4 bg-skyBlue/90 text-black text-xs font-bold px-3 py-1.5 rounded-full">
@@ -493,25 +125,13 @@
                 <div class="flex justify-between items-start">
                     <div>
                         <h1 id="detail-title" class="text-2xl font-serif font-bold">Quinoa Bowl Spesial</h1>
-                        <p class="text-textMuted text-sm mt-1">oleh Trumada Kitchen</p>
-                        <div id="detail-tags" class="flex gap-2 mt-2">
-                            <span class="text-xs bg-skyBlue/10 text-skyBlue px-2 py-1 rounded-full">Sehat</span>
-                            <span class="text-xs bg-success/10 text-success px-2 py-1 rounded-full">Organik</span>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <span id="detail-price" class="text-2xl font-bold text-skyBlue">$14.50</span>
-                        <p class="text-xs text-textMuted mt-1">per porsi</p>
+
                     </div>
                 </div>
             </div>
 
             <div class="px-5 mt-6">
-                <h4 class="text-base font-semibold mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-info-circle text-skyBlue"></i>
-                    Deskripsi
-                </h4>
-                <p id="detail-description" class="text-sm text-textMuted leading-relaxed">
+
                     Hidangan sehat dan lezat yang menggabungkan quinoa organik, alpukat segar, tomat ceri panggang, dan sayuran hijau pilihan. Disiram dengan saus lemon tahini homemade yang memberikan rasa segar dan gurih. Sempurna untuk makan siang yang mengenyangkan namun ringan.
                 </p>
             </div>
@@ -552,14 +172,14 @@
                             <input type="checkbox" class="extra-checkbox w-5 h-5 accent-skyBlue rounded" data-price="2.00">
                             <span class="text-sm">Extra Alpukat</span>
                         </div>
-                        <span class="text-skyBlue font-medium">+$2.00</span>
+                        <span class="text-skyLight font-medium">+$2.00</span>
                     </label>
                     <label class="flex items-center justify-between bg-cardBg p-4 rounded-2xl cursor-pointer transition-all hover:bg-cardHover">
                         <div class="flex items-center gap-3">
                             <input type="checkbox" class="extra-checkbox w-5 h-5 accent-skyBlue rounded" data-price="1.50">
                             <span class="text-sm">Extra Protein Telur</span>
                         </div>
-                        <span class="text-skyBlue font-medium">+$1.50</span>
+                        <span class="text-skyLight font-medium">+$1.50</span>
                     </label>
                     <label class="flex items-center justify-between bg-cardBg p-4 rounded-2xl cursor-pointer transition-all hover:bg-cardHover">
                         <div class="flex items-center gap-3">
@@ -571,31 +191,15 @@
                 </div>
             </div>
 
-            <div class="fixed bottom-0 left-0 right-0 bg-cardBg/95 backdrop-blur-xl border-t border-borderSubtle p-5 z-50" style="max-width:420px; margin:0 auto;">
+            <div class="fixed bottom-0 left-0 right-0 bg-cardBg/95 backdrop-blur-xl border-t border-borderLight p-5 z-50" style="max-width:420px; margin:0 auto;">
                 <div class="flex items-center justify-between gap-4">
                     <div class="flex items-center gap-3 bg-cardBg rounded-2xl p-1.5">
-                        <button id="qty-minus" onclick="changeQuantity(-1)" class="qty-btn w-9 h-9 rounded-xl bg-darkBg flex items-center justify-center text-textMuted hover:bg-cardHover transition-colors" aria-label="Kurangi jumlah">
-                            <i class="fa-solid fa-minus text-xs"></i>
-                        </button>
-                        <span id="qty-value" class="font-semibold text-base w-6 text-center" aria-label="Jumlah">1</span>
-                        <button id="qty-plus" onclick="changeQuantity(1)" class="qty-btn w-9 h-9 rounded-xl bg-skyBlue flex items-center justify-center text-black hover:bg-skyBlueDark transition-colors" aria-label="Tambah jumlah">
+
                             <i class="fa-solid fa-plus text-xs"></i>
                         </button>
                     </div>
                     
-                    <button onclick="addToCartFromDetail()" class="flex-1 bg-skyBlue text-black font-semibold py-4 rounded-2xl text-sm shadow-lg shadow-skyBlue/30 btn-press flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-cart-plus"></i>
-                        <span>Tambah</span>
-                        <span id="detail-total-price" class="font-bold">$14.50</span>
-                    </button>
-                </div>
-            </div>
-        </div>
 
-
-        <!-- ==================== SCREEN 4: SEARCH ==================== -->
-        <div id="screen-search" class="screen no-scrollbar pb-24" role="region" aria-label="Cari Menu">
-            <div class="sticky top-0 z-40 bg-darkBg/95 backdrop-blur-lg border-b border-borderSubtle">
                 <div class="flex justify-between items-center px-5 pt-14 pb-4">
                     <button onclick="navigateTo('screen-home')" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press" aria-label="Kembali">
                         <i class="fa-solid fa-arrow-left"></i>
@@ -607,12 +211,9 @@
 
             <div class="px-5 py-4">
                 <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-textMuted"></i>
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 textMuted"></i>
                     <input type="text" id="search-input" placeholder="Cari makanan favorit..." 
-                           class="w-full bg-cardBg text-white py-3.5 pl-12 pr-14 rounded-2xl focus:outline-none focus:ring-2 focus:ring-skyBlue/50 text-sm"
-                           aria-label="Cari menu">
-                    <button id="clear-search" class="absolute right-3 top-1/2 -translate-y-1/2 bg-gray-800 p-2 rounded-xl text-textMuted hover:text-white transition-colors hidden" aria-label="Hapus pencarian">
-                        <i class="fa-solid fa-times text-xs"></i>
+
                     </button>
                 </div>
             </div>
@@ -628,24 +229,12 @@
 
             <div class="px-5 mb-4">
                 <div class="flex gap-2 overflow-x-auto no-scrollbar">
-                    <button class="search-cat active category-pill px-5 py-2.5 bg-skyBlue text-black rounded-full text-sm font-medium whitespace-nowrap" data-category="all">Semua</button>
-                    <button class="search-cat category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap" data-category="v">
-                        <i class="fa-solid fa-leaf mr-1 text-xs"></i>Vegan
-                    </button>
-                    <button class="search-cat category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap" data-category="m">
-                        <i class="fa-solid fa-drumstick-bite mr-1 text-xs"></i>Daging
-                    </button>
-                    <button class="search-cat category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap" data-category="s">
-                        <i class="fa-solid fa-fish mr-1 text-xs"></i>Seafood
-                    </button>
-                    <button class="search-cat category-pill px-5 py-2.5 bg-cardBg text-textMuted rounded-full text-sm font-medium whitespace-nowrap" data-category="d">
-                        <i class="fa-solid fa-mug-hot mr-1 text-xs"></i>Minuman
-                    </button>
+
                 </div>
             </div>
 
             <div class="px-5 flex-1">
-                <p id="search-results-count" class="text-textMuted text-xs mb-4">Menampilkan semua menu</p>
+                <p id="search-results-count" class="textMuted text-xs mb-4">Menampilkan semua menu</p>
                 <div id="search-results" class="grid grid-cols-2 gap-3"></div>
                 
                 <!-- Empty State -->
@@ -658,7 +247,7 @@
                 </div>
             </div>
 
-            <nav class="fixed bottom-0 left-0 right-0 bg-cardBg/95 backdrop-blur-xl border-t border-borderSubtle z-50" style="max-width:420px; margin:0 auto;" aria-label="Navigasi utama">
+
                 <div class="flex justify-around items-center py-3 px-4">
                     <button onclick="navigateTo('screen-home')" class="nav-item flex flex-col items-center gap-1 px-4 py-1">
                         <i class="fa-solid fa-house text-xl"></i>
@@ -670,7 +259,7 @@
                     </button>
                     <button onclick="navigateTo('screen-cart')" class="nav-item flex flex-col items-center gap-1 px-4 py-1 relative">
                         <i class="fa-solid fa-bag-shopping text-xl"></i>
-                        <span id="cart-badge-search" class="absolute top-0 right-2 w-4 h-4 bg-skyBlue text-black text-[9px] font-bold rounded-full flex items-center justify-center hidden" aria-live="polite">0</span>
+
                         <span class="text-[10px] font-medium">Cart</span>
                     </button>
                     <button onclick="navigateTo('screen-favorites')" class="nav-item flex flex-col items-center gap-1 px-4 py-1 relative">
@@ -734,68 +323,29 @@
             </nav>
         </div>
 
-        <!-- ==================== SCREEN 6: CART ==================== -->
-        <div id="screen-cart" class="screen no-scrollbar pb-32" role="region" aria-label="Keranjang Belanja">
-            <div class="sticky top-0 z-40 bg-darkBg/95 backdrop-blur-lg border-b border-borderSubtle">
+
                 <div class="flex justify-between items-center px-5 pt-14 pb-4">
                     <button onclick="navigateBack()" class="w-11 h-11 bg-cardBg rounded-2xl flex items-center justify-center btn-press" aria-label="Kembali">
                         <i class="fa-solid fa-arrow-left"></i>
                     </button>
                     <h2 class="text-xl font-serif font-bold">Keranjang</h2>
-                    <button id="clear-cart-btn" onclick="clearCart()" class="text-danger text-sm hover:underline hidden">Hapus Semua</button>
-                </div>
+
             </div>
 
             <div id="cart-items" class="px-5 mt-4 flex-1">
                 <div id="cart-empty" class="flex flex-col items-center justify-center py-20">
                     <div class="w-24 h-24 bg-cardBg rounded-full flex items-center justify-center mb-4">
-                        <i class="fa-solid fa-bag-shopping text-4xl text-textMuted"></i>
+                        <i class="fa-solid fa-bag-shopping text-4xl textMuted"></i>
                     </div>
                     <h3 class="text-lg font-semibold mb-2">Keranjang Kosong</h3>
-                    <p class="text-textMuted text-sm text-center mb-6">Yuk mulai pilih menu favoritmu dan pesan sekarang!</p>
-                    <button onclick="navigateTo('screen-home')" class="bg-skyBlue text-black font-semibold px-6 py-3 rounded-full text-sm btn-press flex items-center gap-2">
-                        <i class="fa-solid fa-utensils"></i>
+
                         Mulai Pesan
                     </button>
                 </div>
                 <div id="cart-list" class="space-y-3 hidden"></div>
             </div>
 
-            <!-- Delivery Options -->
-            <div id="delivery-options" class="px-5 py-4 bg-cardBg/50 border-t border-borderSubtle hidden">
-                <h4 class="text-sm font-semibold mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-truck text-skyBlue"></i>
-                    Opsi Pengiriman
-                </h4>
-                <div class="space-y-2">
-                    <label class="flex items-center gap-3 bg-cardBg p-3 rounded-xl cursor-pointer hover:bg-cardHover transition-colors">
-                        <input type="radio" name="delivery" value="standard" class="w-4 h-4 accent-skyBlue" checked>
-                        <div class="flex-1">
-                            <p class="text-sm font-medium">Standard</p>
-                            <p class="text-xs text-textMuted">30-45 menit</p>
-                        </div>
-                        <span class="text-success text-xs font-medium">Gratis</span>
-                    </label>
-                    <label class="flex items-center gap-3 bg-cardBg p-3 rounded-xl cursor-pointer hover:bg-cardHover transition-colors">
-                        <input type="radio" name="delivery" value="express" class="w-4 h-4 accent-skyBlue">
-                        <div class="flex-1">
-                            <p class="text-sm font-medium">Express</p>
-                            <p class="text-xs text-textMuted">15-20 menit</p>
-                        </div>
-                        <span class="text-skyBlue text-xs font-medium">+$2.00</span>
-                    </label>
-                </div>
-            </div>
 
-            <div id="cart-summary" class="fixed bottom-0 left-0 right-0 bg-cardBg/95 backdrop-blur-xl border-t border-borderSubtle p-5 rounded-t-3xl z-50 hidden" style="max-width:420px; margin:0 auto;">
-                <div class="space-y-2 mb-4">
-                    <div class="flex justify-between text-sm">
-                        <span class="text-textMuted">Subtotal (<span id="cart-item-count">0</span> item)</span>
-                        <span id="cart-subtotal">$0.00</span>
-                    </div>
-                    <div id="delivery-fee-row" class="flex justify-between text-sm hidden">
-                        <span class="text-textMuted">Ongkos Kirim</span>
-                        <span id="cart-delivery-fee" class="text-skyBlue">Gratis</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-textMuted">Diskon</span>
@@ -804,14 +354,7 @@
                     <div class="h-px bg-borderSubtle my-2"></div>
                     <div class="flex justify-between items-center">
                         <span class="font-semibold">Total</span>
-                        <div class="text-right">
-                            <span id="cart-total" class="text-xl font-bold text-skyBlue">$0.00</span>
-                            <p id="cart-savings" class="text-xs text-success hidden">Hemat $0.00</p>
-                        </div>
-                    </div>
-                </div>
-                <button id="checkout-btn" onclick="checkout()" class="w-full bg-skyBlue text-black font-semibold py-4 rounded-2xl text-sm shadow-lg shadow-skyBlue/30 btn-press flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-credit-card"></i>
+
                     <span>Pesan Sekarang</span>
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -1080,8 +623,8 @@
             updateDetailPrice();
             const minusBtn = document.getElementById('qty-minus');
             minusBtn.className = quantity <= 1 
-                ? 'qty-btn w-9 h-9 rounded-xl bg-darkBg flex items-center justify-center text-textMuted opacity-50'
-                : 'qty-btn w-9 h-9 rounded-xl bg-darkBg flex items-center justify-center text-white';
+                ? 'qty-btn w-9 h-9 rounded-xl bg-darkBg flex items-center justify-center textMuted opacity-50'
+                : 'qty-btn w-9 h-9 rounded-xl bg-darkBg flex items-center justify-center text-primary';
         }
 
         function updateDetailPrice() {
@@ -1176,14 +719,14 @@
                     <img src="${item.image}" alt="${item.title}" class="w-20 h-20 rounded-2xl object-cover">
                     <div class="flex-1 min-w-0">
                         <h5 class="font-semibold text-sm truncate">${item.title}</h5>
-                        <p class="text-skyBlue text-sm font-medium mt-0.5">$${(item.price * item.qty).toFixed(2)}</p>
+                        <p class="text-skyLight text-sm font-medium mt-0.5">$${(item.price * item.qty).toFixed(2)}</p>
                     </div>
                     <div class="flex items-center gap-2 bg-darkBg rounded-xl p-1">
-                        <button onclick="updateCartItemQty('${item.id}', -1)" class="w-7 h-7 rounded-lg flex items-center justify-center text-textMuted hover:text-white">
+                        <button onclick="updateCartItemQty('${item.id}', -1)" class="w-7 h-7 rounded-lg flex items-center justify-center textMuted hover:text-primary">
                             <i class="fa-solid fa-minus text-xs"></i>
                         </button>
                         <span class="font-medium text-sm w-5 text-center">${item.qty}</span>
-                        <button onclick="updateCartItemQty('${item.id}', 1)" class="w-7 h-7 rounded-lg flex items-center justify-center bg-skyBlue text-black">
+                        <button onclick="updateCartItemQty('${item.id}', 1)" class="w-7 h-7 rounded-lg flex items-center justify-center bg-skyLight text-darkBg">
                             <i class="fa-solid fa-plus text-xs"></i>
                         </button>
                     </div>
@@ -1231,15 +774,15 @@
                 <div class="bg-cardBg rounded-3xl p-4 cursor-pointer menu-item" onclick="openDetail('${item.id}')">
                     <div class="relative -mt-4 mb-3">
                         <img src="${item.image}" alt="${item.title}" class="w-full h-32 object-cover rounded-2xl">
-                        <span class="absolute top-2 right-2 bg-black/70 text-white text-[10px] px-2 py-1 rounded-lg flex items-center">
-                            <i class="fa-solid fa-star text-skyBlue mr-1 text-xs"></i>${item.rating}
+                        <span class="absolute top-2 right-2 bg-skyDark/70 text-primary text-[10px] px-2 py-1 rounded-lg flex items-center">
+                            <i class="fa-solid fa-star text-skyLight mr-1 text-xs"></i>${item.rating}
                         </span>
                     </div>
                     <h5 class="font-semibold text-sm mb-1">${item.title}</h5>
                     <div class="flex justify-between items-center">
-                        <span class="text-skyBlue font-bold">$${item.price.toFixed(2)}</span>
-                        <button onclick="event.stopPropagation(); addToCart('${item.id}')" class="w-8 h-8 bg-skyBlue rounded-lg flex items-center justify-center btn-press">
-                            <i class="fa-solid fa-plus text-black text-xs"></i>
+                        <span class="text-skyLight font-bold">$${item.price.toFixed(2)}</span>
+                        <button onclick="event.stopPropagation(); addToCart('${item.id}')" class="w-8 h-8 bg-skyLight rounded-lg flex items-center justify-center btn-press">
+                            <i class="fa-solid fa-plus text-darkBg text-xs"></i>
                         </button>
                     </div>
                 </div>
